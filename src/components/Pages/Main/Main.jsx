@@ -5,6 +5,7 @@ import SomeServices from "./SomeServices/SomeServices";
 import QNA from "./QNA/QNA";
 import Testimonials from "./Testimonials/Testimonials";
 import Footer from "./Footer/Footer";
+import FacebookMsg from "../ChatBox/FacebookMsg";
 
 const Main = () => {
   return (
@@ -15,7 +16,9 @@ const Main = () => {
       <QNA />
       <Testimonials />
       <Footer />
+      <FacebookMsg/>
     </div>
+
   );
 };
 

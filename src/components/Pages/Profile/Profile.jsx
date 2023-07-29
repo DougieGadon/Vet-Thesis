@@ -29,6 +29,21 @@ const Profile = () => {
     navigate("/");
   };
 
+  async function handlePaymentClick(amount, description, remarks) {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Basic c2tfdGVzdF95NTR0NHhxeEZBd3I5cUUyRW9nYVZ4QVI6'},
+      body: JSON.stringify({ "data": { "attributes": { "amount": amount, "description": description, "remarks": remarks } }})
+    };
+    const data = await fetch('https://api.paymongo.com/v1/links', requestOptions)
+      .then(response => response.json());
+
+    console.log("test")
+    console.log(data.data.attributes.checkout_url);
+    window.open(data.data.attributes.checkout_url, '_blank', 'noopener,noreferrer');
+
+  }
+
   useEffect(() => {
     const getUserData = async () => {
       const userData = await getSpecificDocumentFromCollection("users", userId);
@@ -126,7 +141,7 @@ const Profile = () => {
           <h2 className="font-heading tracking-px-n mb-5 text-center text-3xl font-bold leading-none text-secGreen md:text-4xl xl:text-5xl">
             Appointment
           </h2>
-          <div className="mx-auto flex w-full max-w-[400px] flex-col items-center justify-center gap-3 border-2 border-secGreen p-4 text-lg">
+          <div className="mx-auto flex w-full max-w-[400px] flex-col justify-center gap-3 border-2 border-secGreen p-4 text-lg">
             <p>
               <span className="font-bold">To: </span>
               {userAppointment.doctor
@@ -147,25 +162,38 @@ const Profile = () => {
               <span className="font-bold">Reception time: </span>
               {userAppointment.date ? userAppointment.date : ""}
             </p>
-            <button
-              className="rounded-sm p-2 font-bold text-secGreen duration-200 hover:bg-secGreen hover:text-bgGreen"
-              onClick={cancelAppointment}
-            >
-              Cancel appointment
-            </button>
+            <div className="flex justify-between">
+              <div>
+              <button
+                className="rounded-sm border-2 border-secGreen px-6 py-3 font-bold text-secGreen duration-200 hover:bg-secGreen hover:text-bgGreen"
+                onClick={cancelAppointment}
+              >
+                Cancel 
+              </button>
+              </div>
+              <div>
+              <button className="hero-button button h-[45px] w-[100px] border border-secGreen bg-bgGreen text-secGreen" onClick={()=>{handlePaymentClick(10000, userAppointment.service
+                ? `${userAppointment.service[0].toUpperCase()}${userAppointment.service.slice(
+                    1
+                  )}`
+                : "",  userAppointment.date ? userAppointment.date : "")}}>
+              Pay Now
+              </button>
+              </div>
+            </div>
           </div>
         </div>
       ) : (
         ""
       )}
-      <div className="mx-auto mt-10 flex w-full max-w-[1280px] justify-center px-4 pb-5">
+      {/* <div className="mx-auto mt-10 flex w-full max-w-[1280px] justify-center px-4 pb-5">
         <button
           className="rounded-sm border-2 border-secGreen px-6 py-3 font-bold text-secGreen duration-200 hover:bg-secGreen hover:text-bgGreen"
           onClick={userSignOut}
         >
           Sign Out
         </button>
-      </div>
+      </div> */}
       <Modal
         active={modalActive}
         setActive={setModalActive}

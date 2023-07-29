@@ -21,6 +21,8 @@ import SpecificAppointment from "./components/Pages/SpecificAppointment/Specific
 import Reviews from "./components/Pages/Reviews/Reviews";
 import { APrivateRoutes, DPrivateRoutes } from "./privateRoutes";
 import ResetPassword from "./components/Pages/ResetPassword/ResetPassword";
+import SignUpAdmin from "./components/Pages/SignUp/SignUpAdmin";
+import SignUpDoctor from "./components/Pages/SignUp/SignUpDoctor";
 
 const App = () => {
   return (
@@ -29,6 +31,8 @@ const App = () => {
         <Route path="/" element={<Main />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup-admin" element={<SignUpAdmin />} />
+        <Route path="/signup-doctor" element={<SignUpDoctor />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/request-appointment" element={<RequestAnAppointment />} />

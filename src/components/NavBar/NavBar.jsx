@@ -1,10 +1,15 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useInView } from "react-intersection-observer";
+
 import "./NavBar.scss";
+import { auth } from "../../firebase";
+import { resetState } from "../../redux/userSlice/userSlice";
 
 const NavBar = ({ bg }) => {
+   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [menuVisibility, setMenuVisibility] = useState(
     "top-[-100%] right-[-100%]"
   );
@@ -46,6 +51,12 @@ const NavBar = ({ bg }) => {
 
   const role = useSelector((state) => state.user.role);
 
+  const userSignOut = () => {
+    auth.signOut();
+    dispatch(resetState());
+    navigate("/");
+  };
+
   return (
     <div
       ref={ref}
@@ -67,6 +78,7 @@ const NavBar = ({ bg }) => {
                 <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/user-list">USER LIST</NavLink>
                 <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/banned-users">BANNED USERS</NavLink>
                 <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/pending-reviews">PENDING REVIEWS</NavLink>
+                <button  className="px-6 py-3 font-bold text-secGreen" onClick={() => {userSignOut()}}>SIGN OUT</button>
               </div>
           ) : role === "doctor" ? (
             <div className="profile z-10">
@@ -74,6 +86,7 @@ const NavBar = ({ bg }) => {
                   APPOINT<span className="xsm:hidden">-</span>MENTS
                 </NavLink>
                 <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/reviews">REVIEWS</NavLink>
+                <button  className="px-6 py-3 font-bold text-secGreen" onClick={() => {userSignOut()}}>SIGN OUT</button>
                 </div>
           ) : (
             <div className="profile z-10">
@@ -83,12 +96,13 @@ const NavBar = ({ bg }) => {
                 <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/about">ABOUT US</NavLink>
                 <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/contacts">CONTACTS</NavLink>
                 <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/faq">FAQ</NavLink>
+                <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/appointments">APPOINTMENT</NavLink>
                 {role != null ? 
                   <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/profile">PROFILE</NavLink> 
                   : 
                   <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/signup">SIGNUP</NavLink>
                   }
-                
+                <button  className="px-6 py-3 font-bold text-secGreen" onClick={() => {userSignOut()}}>SIGN OUT</button>
             </div>
           )}
 

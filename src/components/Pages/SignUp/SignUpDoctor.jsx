@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Modal from "../../Modal/Modal";
 
-const SignUp = () => {
+const SignUpDoctor = () => {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [modalActive, setModalActive] = useState(false);
@@ -79,7 +79,7 @@ const SignUp = () => {
         email,
         password
       );
-      const role = "user";
+      const role = "doctor";
       const userData = {
         name,
         surname,
@@ -240,4 +240,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignUpDoctor;

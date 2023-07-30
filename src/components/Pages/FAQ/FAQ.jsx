@@ -26,13 +26,6 @@ const AboutUs = () => {
       <h2 class="font-heading tracking-px-n mb-10 text-center text-5xl font-bold leading-none text-secGreen md:text-7xl xl:text-8xl">
         Frequently Asked Questions
       </h2>
-      {/* <div className="md:container">
-        <div className="mx-auto flex max-w-[1280px] flex-col-reverse items-center md:mt-10 md:flex-row md:items-start md:gap-10 md:pb-10">
-            <button className="hero-button button h-[45px] w-[100px] border border-secGreen bg-bgGreen text-secGreen" onClick={()=>{handlePaymentClick(10000, "This is a decription", "This is a remark")}}>
-              Pay Now
-            </button>
-        </div>
-      </div> */}
     </div>
   );
 };

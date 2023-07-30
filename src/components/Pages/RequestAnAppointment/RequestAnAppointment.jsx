@@ -24,6 +24,9 @@ const RequestAnAppointment = () => {
     service: "",
     toWhichDoctor: "",
     date: "",
+    time_appointment: "",
+    payment_status: "Unpaid",
+    payment_link_id: "",
     comment: "",
     ended: false,
   });
@@ -32,6 +35,9 @@ const RequestAnAppointment = () => {
   const [message, setMessage] = useState("");
   const [buttonLink, setButtonLink] = useState("");
   const [modalActive, setModalActive] = useState(false);
+  const date = new Date();
+  const theDayOfTheMonthOnNextWeek = date.getDate() + 7;
+  date.setDate(theDayOfTheMonthOnNextWeek)
 
   const schema = yup.object().shape({
     name: yup
@@ -79,15 +85,17 @@ const RequestAnAppointment = () => {
   let userL = useSelector((state) => state.user);
   const [user, setUser] = useState({});
 
-  let doctorL = useSelector((state) => state.doctor);
-  const [doctor, setDoctor] = useState({});
+  const [doctor, setDoctor] = useState([]);
 
   useEffect(() => {
     const getUser = async () => {
       const userF = await getSpecificDocumentFromCollection("users", userL.id);
       setUser(userF);
+      console.log(userF);
     };
     getUser();
+  }, []);
+  useEffect(() => {
     const getDoctor = async () => {
           const doctorF = await getAllDocumentsFromCollection("users");
           console.log(doctorF);
@@ -142,9 +150,9 @@ const RequestAnAppointment = () => {
   return (
     <div className="min-h-screen bg-bgGreen">
       <NavBar />
-      <div className="flex flex-col items-center gap-5">
+      <div className="flex flex-col items-center">
         {userL.id === null ? (
-          <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center">
+          <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center ">
             <p className="max-w-[590px] text-center text-4xl font-bold text-secGreen">
               Please register to be able to make an appointment to a doctor
             </p>
@@ -309,8 +317,6 @@ const RequestAnAppointment = () => {
                     .map((doc) => (
                       <option value={`${doc.id}`}>{doc.name} {doc.surname}</option> 
                     ))}
-                  {/* <option value="jewel">Jewel Pintor</option>
-                  <option value="gerald">Gerald Pintor</option> */}
                 </select>
               </div>
               {errors.toWhichDoctor && (
@@ -322,7 +328,7 @@ const RequestAnAppointment = () => {
                 <input
                   type="date"
                   name="date"
-                  min={new Date().toISOString().split("T")[0]}
+                  min={date.toISOString().split("T")[0]}
                   onChange={handleInputChange}
                   defaultValue={appointmentData.date}
                   className={`${inputClass} input-auth bg-bgGreen px-[7px] text-[17px] text-[#74bb8f]`}
@@ -331,6 +337,25 @@ const RequestAnAppointment = () => {
               {errors.date && (
                 <p className="-mt-3 text-[12px] text-red-500">
                   {errors.date.message}
+                </p>
+              )}
+              <div className="form-field-auth h-[50px]">
+                <input
+                  type="time"
+                  name="time_appointment"
+                  min="08:00"
+                  max="17:00"
+                  onChange={handleInputChange}
+                  className={`${inputClass} input-auth bg-bgGreen p-[10px] text-[17px] text-[#74bb8f]`}
+                  maxLength={50}
+                />
+                <label className="label-auth absolute w-[183px] bg-bgGreen text-[17px]">
+                  Additional comment
+                </label>
+              </div>
+              {errors.time_appointment && (
+                <p className="-mt-3 text-[12px] text-red-500">
+                  {errors.time_appointment.message}
                 </p>
               )}
               <div className="form-field-auth h-[50px]">

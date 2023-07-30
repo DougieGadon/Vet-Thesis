@@ -9,12 +9,15 @@ import {
   getSpecificDocumentFromCollection,
   getSpecificDocumentFromSubcollection,
   updateSpecificDocumentInCollection,
+  updateDocumentInSubcollection,
 } from "../../../firebaseQueries";
 import Modal from "../../Modal/Modal";
 
 const Profile = () => {
   const [user, setUser] = useState({});
-  const [userAppointment, setUserAppointment] = useState({});
+  const [doctor, setDoctor] = useState({});
+  const [status, setStatus] = useState({});
+  const [userAppointment, setUserAppointment] = useState([]);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [modalActive, setModalActive] = useState(false);
@@ -22,6 +25,7 @@ const Profile = () => {
   const whoUse = useSelector((state) => state.user.role);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+ 
 
   const userSignOut = () => {
     auth.signOut();
@@ -37,9 +41,9 @@ const Profile = () => {
     };
     const data = await fetch('https://api.paymongo.com/v1/links', requestOptions)
       .then(response => response.json());
-
-    console.log("test")
-    console.log(data.data.attributes.checkout_url);
+    
+    updatePaymentStatus(data.data.attributes.checkout_url.split("/").pop());
+      
     window.open(data.data.attributes.checkout_url, '_blank', 'noopener,noreferrer');
 
   }
@@ -55,8 +59,41 @@ const Profile = () => {
       );
       setUser(userData);
       setUserAppointment(userVisit);
+      console.log("appointment");
+      console.log(userVisit);
+
+      const doctorData = await getSpecificDocumentFromCollection("users", userVisit.doctor);
+      setDoctor(doctorData);
+      console.log("doctor");
+      console.log(doctorData.id);
+      console.log(userVisit.payment_link_id);
+
+      const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Basic c2tfdGVzdF95NTR0NHhxeEZBd3I5cUUyRW9nYVZ4QVI6'}
+      };
+      const data = await fetch(`https://api.paymongo.com/v1/links/${userVisit.payment_link_id}`, requestOptions)
+        .then(response => response.json());
+      
+        console.log(data.data.attributes.status);
+        if(data.data.attributes.status==='paid') {
+          try {
+            await updateDocumentInSubcollection("doctors", doctorData.id, "appointments", userVisit.id, {
+              payment_status: "Paid",
+            });
+            await updateDocumentInSubcollection("users", userData.id, "appointment", "main", {
+              payment_status: "Paid",
+            });
+          } catch (error) {
+            setModalActive(true);
+            setTitle("Something went wrong!");
+            setMessage(`${error.message}`);
+          }
+        }
+
     };
     getUserData();
+    
   }, []);
 
   const cancelAppointment = async () => {
@@ -86,6 +123,23 @@ const Profile = () => {
       setMessage(`${error.message}`);
     }
   };
+
+  const updatePaymentStatus = async (payment_link_id) => {
+    try {
+      await updateDocumentInSubcollection("doctors", doctor.id, "appointments", userAppointment.id, {
+        payment_status: "Pending",
+        payment_link_id: payment_link_id,
+      });
+      await updateDocumentInSubcollection("users", userId, "appointment", "main", {
+        payment_status: "Pending",
+        payment_link_id: payment_link_id,
+      });
+    } catch (error) {
+      setModalActive(true);
+      setTitle("Something went wrong!");
+      setMessage(`${error.message}`);
+    }
+  };
   return (
     <div className="min-h-screen bg-bgGreen">
       <NavBar />
@@ -99,7 +153,7 @@ const Profile = () => {
             src="/assets/profile/ducks.jpg"
           />
         </div> */}
-        {whoUse === "user" ? (
+        {whoUse === "user" || whoUse === "doctor"? (
           <div className="md:flex md:flex-col md:justify-between md:gap-5">
             <p className="text-xl font-bold">
               Name:{" "}
@@ -119,7 +173,7 @@ const Profile = () => {
                 {user.email ? user.email : ""}
               </span>{" "}
             </p>
-            <p className="text-xl font-bold">
+            {/* <p className="text-xl font-bold">
               Have you made an appointment:{" "}
               <span className="font-thin text-secGreen">
                 {user.made === false ? "No" : "Yes"}
@@ -130,7 +184,7 @@ const Profile = () => {
               <span className="font-thin text-secGreen">
                 {user.sent === false ? "No" : "Yes"}
               </span>{" "}
-            </p>
+            </p> */}
           </div>
         ) : (
           ""
@@ -141,13 +195,17 @@ const Profile = () => {
           <h2 className="font-heading tracking-px-n mb-5 text-center text-3xl font-bold leading-none text-secGreen md:text-4xl xl:text-5xl">
             Appointment
           </h2>
+
           <div className="mx-auto flex w-full max-w-[400px] flex-col justify-center gap-3 border-2 border-secGreen p-4 text-lg">
             <p>
               <span className="font-bold">To: </span>
-              {userAppointment.doctor
+              {/* {userAppointment.doctor
                 ? `${userAppointment.doctor[0].toUpperCase()}${userAppointment.doctor.slice(
                     1
                   )}`
+                : ""} */}
+                {doctor.name
+                ? `${doctor.name.toUpperCase()} ${doctor.surname.toUpperCase()}`
                 : ""}
             </p>
             <p>
@@ -159,10 +217,23 @@ const Profile = () => {
                 : ""}
             </p>
             <p>
-              <span className="font-bold">Reception time: </span>
+              <span className="font-bold">Appointment Date: </span>
               {userAppointment.date ? userAppointment.date : ""}
             </p>
+            <p>
+              <span className="font-bold">Appointment Time: </span>
+              {userAppointment.time_appointment ? userAppointment.time_appointment : ""}
+            </p>
             <div className="flex justify-between">
+            {userAppointment.payment_status === "Paid" ? (
+              <div>
+              <button
+                className="rounded-sm border-2 border-secGreen px-6 py-3 font-bold text-secGreen duration-200"
+              >
+                No Refund 
+              </button>
+              </div>
+            ) : (
               <div>
               <button
                 className="rounded-sm border-2 border-secGreen px-6 py-3 font-bold text-secGreen duration-200 hover:bg-secGreen hover:text-bgGreen"
@@ -171,8 +242,16 @@ const Profile = () => {
                 Cancel 
               </button>
               </div>
+            )}
+              {userAppointment.payment_status === "Paid" ? (
+                <div>
+                <button className="rounded-sm border-2 border-secGreen px-6 py-3 font-bold text-secGreen duration-200">
+                Paid
+                </button>
+                </div>
+              ) : (
               <div>
-              <button className="hero-button button h-[45px] w-[100px] border border-secGreen bg-bgGreen text-secGreen" onClick={()=>{handlePaymentClick(10000, userAppointment.service
+              <button className="rounded-sm border-2 border-secGreen px-6 py-3 font-bold text-secGreen duration-200 hover:bg-secGreen hover:text-bgGreen" onClick={()=>{handlePaymentClick(10000, userAppointment.service
                 ? `${userAppointment.service[0].toUpperCase()}${userAppointment.service.slice(
                     1
                   )}`
@@ -180,20 +259,14 @@ const Profile = () => {
               Pay Now
               </button>
               </div>
+              )}
             </div>
           </div>
         </div>
       ) : (
         ""
       )}
-      {/* <div className="mx-auto mt-10 flex w-full max-w-[1280px] justify-center px-4 pb-5">
-        <button
-          className="rounded-sm border-2 border-secGreen px-6 py-3 font-bold text-secGreen duration-200 hover:bg-secGreen hover:text-bgGreen"
-          onClick={userSignOut}
-        >
-          Sign Out
-        </button>
-      </div> */}
+
       <Modal
         active={modalActive}
         setActive={setModalActive}

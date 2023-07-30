@@ -6,20 +6,21 @@ import { getSpecificDocumentFromSubcollection } from "../../../firebaseQueries";
 
 const SpecificAppointment = () => {
   const [appointment, setAppointment] = useState();
-  const { id } = useParams();
+  const { doctorId, appointmentId } = useParams();
   const doctorName = useSelector((state) => state.user.name.toLowerCase());
 
   useEffect(() => {
     (async () => {
       try {
-        console.log(doctorName, id);
+        console.log(doctorName, doctorId, appointmentId);
         const specAppointment = await getSpecificDocumentFromSubcollection(
           "doctors",
-          "jewel",//doctorName,
+          doctorId,
           "appointments",
-          id
+          appointmentId
         );
         setAppointment(specAppointment);
+        console.log(specAppointment);
       } catch (error) {
         console.log(error);
       }
@@ -29,7 +30,7 @@ const SpecificAppointment = () => {
   return (
     <div className="min-h-screen bg-bgGreen">
       <NavBar />
-      <h2 class="font-heading tracking-px-n mb-10 text-center text-5xl font-bold leading-none text-secGreen md:text-7xl xl:text-8xl">
+      <h2 className="font-heading tracking-px-n mb-10 text-center text-5xl font-bold leading-none text-secGreen md:text-7xl xl:text-8xl">
         {appointment?.name}'s Appointment
       </h2>
       <div className="mx-auto flex w-full max-w-[500px] flex-col items-start justify-start gap-4 rounded-md border-2 border-gray-300 p-4 shadow-lg">
@@ -46,8 +47,12 @@ const SpecificAppointment = () => {
           {appointment?.email}
         </div>
         <div>
-          <span className="font-bold text-blackGreen">Reception time: </span>{" "}
+          <span className="font-bold text-blackGreen">Appointment Date: </span>{" "}
           {appointment?.date}
+        </div>
+        <div>
+          <span className="font-bold text-blackGreen">Appointment Time: </span>{" "}
+          {appointment?.time_appointment}
         </div>
         <div>
           <span className="font-bold text-blackGreen">Pet Name: </span>{" "}

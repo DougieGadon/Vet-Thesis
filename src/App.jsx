@@ -48,7 +48,7 @@ const App = () => {
         </Route>
         <Route element={<DPrivateRoutes />}>
           <Route path="/appointments" element={<Appointments />} />
-          <Route path="/appointments/:id" element={<SpecificAppointment />} />
+          <Route path="/appointments/:doctorId/:appointmentId" element={<SpecificAppointment />} />
           <Route path="/reviews" element={<Reviews />} />
         </Route>
         <Route path="*" element={<Error />} />

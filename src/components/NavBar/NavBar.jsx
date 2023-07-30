@@ -87,7 +87,7 @@ const NavBar = ({ bg }) => {
                 <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/appointments">
                   APPOINT<span className="xsm:hidden">-</span>MENTS
                 </NavLink>
-                <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/reviews">REVIEWS</NavLink>
+                {/* <NavLink className="scale-y-110 flex-col items-start text-[22px] font-bold leading-[20px] text-secGreen md:my-16 md:ml-7 md:leading-[20px] lg:text-[20px]" to="/reviews">REVIEWS</NavLink> */}
                 <button  className="px-6 py-3 text-[20px] font-bold text-secGreen" onClick={() => {userSignOut()}}>SIGN OUT</button>
                 </div>
           ) : (

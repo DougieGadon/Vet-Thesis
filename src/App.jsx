@@ -31,8 +31,6 @@ const App = () => {
         <Route path="/" element={<Main />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/signup-admin" element={<SignUpAdmin />} />
-        <Route path="/signup-doctor" element={<SignUpDoctor />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/request-appointment" element={<RequestAnAppointment />} />
@@ -45,6 +43,8 @@ const App = () => {
           <Route path="/user-list" element={<UserList />} />
           <Route path="/banned-users" element={<BannedUsers />} />
           <Route path="/pending-reviews" element={<PendingReviews />} />
+          <Route path="/signup-admin" element={<SignUpAdmin />} />
+          <Route path="/signup-doctor" element={<SignUpDoctor />} />
         </Route>
         <Route element={<DPrivateRoutes />}>
           <Route path="/appointments" element={<Appointments />} />

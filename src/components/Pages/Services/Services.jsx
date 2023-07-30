@@ -17,7 +17,7 @@ const Services = () => {
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-4 px-4 pb-10 sm:grid-cols-2 sm:grid-rows-2 lg:grid-cols-4 ">
         {services.map((service) => (
           <Link
-            to={`/services/${service.link}`}
+            // to={`/services/${service.link}`}
             key={service.id}
             className="cell group w-full duration-200 hover:-translate-y-2 hover:shadow-lg bg-[#adc6af]"
           >

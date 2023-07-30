@@ -6,7 +6,9 @@ import { getAllDocumentsFromSubcollection } from "../../../firebaseQueries";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
-  const name = useSelector((state) => state.user.name.toLowerCase());
+  const name = useSelector((state) => state.user.id);
+
+  const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -16,6 +18,7 @@ const Appointments = () => {
           name,
           "appointments"
         );
+        console.log(appointments);
         setAppointments(appointments);
       } catch (error) {
         alert(error);

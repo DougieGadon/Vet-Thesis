@@ -15,7 +15,7 @@ const SpecificAppointment = () => {
         console.log(doctorName, id);
         const specAppointment = await getSpecificDocumentFromSubcollection(
           "doctors",
-          doctorName,
+          "jewel",//doctorName,
           "appointments",
           id
         );

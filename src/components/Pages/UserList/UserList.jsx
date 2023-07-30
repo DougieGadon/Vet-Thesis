@@ -30,26 +30,34 @@ const UserList = () => {
   return (
     <div className="min-h-screen bg-bgGreen">
       <NavBar />
-      <h2 class="font-heading tracking-px-n mb-10 text-center text-5xl font-bold leading-none text-secGreen md:text-7xl xl:text-8xl">
+      <h2 class="font-heading tracking-px-n mb-10 text-center text-5xl font-bold leading-none text-secGreen md:text-5xl xl:text-5xl">
         User list
       </h2>
       <div className="mx-auto w-full px-4">
-        <table className="mx-auto w-full max-w-[800px] table-auto">
-          <thead className="grid grid-cols-3 text-xl font-bold text-blackGreen underline">
+        <table className="mx-auto w-full max-w-[1200px] table-auto">
+          <thead className="grid grid-cols-5 text-xl font-bold text-blackGreen ">
             <th className="pl-2 text-left">Name</th>
+            <th className="pl-1 text-left">Role</th>
+            <th className="pl-2 text-left">Email</th>
             <th className="pl-1 text-left">Ban user</th>
             <th className="text-left">Delete User</th>
           </thead>
           {allUsers
-            .filter((user) => user.role === "user" && user.banned === false)
+            .filter((user) => user.banned === false)
             .map((user) => (
               <tr
                 id={`${user.id}`}
                 key={`${user.email}${Date.now()}${Math.random()}`}
-                className="user mx-auto mt-2 grid grid-cols-3 items-center rounded-sm border-y border-gray-300 p-2 text-xl font-bold shadow-sm"
+                className="user mx-auto mt-5 grid grid-cols-5 "
               >
                 <td className="text-left">
                   {user.name} {user.surname}
+                </td>
+                <td className="text-left">
+                  {user.role}
+                </td>
+                <td className="text-left">
+                  {user.email}
                 </td>
                 <td className="text-left">
                   <button

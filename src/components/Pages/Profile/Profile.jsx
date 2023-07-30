@@ -93,12 +93,12 @@ const Profile = () => {
         Profile
       </h2>
       <div className="mx-auto flex max-w-[1280px] flex-col items-start justify-center gap-4 px-4 md:flex-row">
-        <div className="w-full md:w-1/2">
+        {/* <div className="w-full md:w-1/2">
           <img
             className="w-full rounded-md opacity-95"
             src="/assets/profile/ducks.jpg"
           />
-        </div>
+        </div> */}
         {whoUse === "user" ? (
           <div className="md:flex md:flex-col md:justify-between md:gap-5">
             <p className="text-xl font-bold">

@@ -7,6 +7,7 @@ import {
   addDocumentToSubcollection,
   getSpecificDocumentFromCollection,
   updateSpecificDocumentInCollection,
+  getAllDocumentsFromCollection,
 } from "../../../firebaseQueries";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -78,12 +79,21 @@ const RequestAnAppointment = () => {
   let userL = useSelector((state) => state.user);
   const [user, setUser] = useState({});
 
+  let doctorL = useSelector((state) => state.doctor);
+  const [doctor, setDoctor] = useState({});
+
   useEffect(() => {
     const getUser = async () => {
       const userF = await getSpecificDocumentFromCollection("users", userL.id);
       setUser(userF);
     };
     getUser();
+    const getDoctor = async () => {
+          const doctorF = await getAllDocumentsFromCollection("users");
+          console.log(doctorF);
+          setDoctor(doctorF);
+        };
+        getDoctor();
   }, []);
 
   const handleFormSubmit = async () => {
@@ -294,8 +304,13 @@ const RequestAnAppointment = () => {
                   <option value="" className="bg-bgGreen">
                     Doctor
                   </option>
-                  <option value="jewel">Jewel Pintor</option>
-                  <option value="gerald">Gerald Pintor</option>
+                  {doctor
+                    .filter((doc) => doc.banned === false && doc.role === 'doctor')
+                    .map((doc) => (
+                      <option value={`${doc.id}`}>{doc.name} {doc.surname}</option> 
+                    ))}
+                  {/* <option value="jewel">Jewel Pintor</option>
+                  <option value="gerald">Gerald Pintor</option> */}
                 </select>
               </div>
               {errors.toWhichDoctor && (

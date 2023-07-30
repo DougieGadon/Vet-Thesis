@@ -91,8 +91,8 @@ const SignUpDoctor = () => {
         id: userCredential.user.uid,
       };
       await addDocumentToCollection("users", userCredential.user.uid, userData);
-      dispatch(setUser(userData));
-      navigate("/profile");
+      // dispatch(setUser(userData));
+      navigate("/user-list");
     } catch (error) {
       setModalActive(true);
       setTitle("Something went wrong!");
@@ -119,7 +119,7 @@ const SignUpDoctor = () => {
       <NavBar />
       <div className="mx-auto flex max-w-[1280px] flex-col justify-center bg-bgGreen pb-5">
         <p className="px-4 text-center text-4xl font-bold text-secGreen">
-          Create an account
+          Create a Doctor account
         </p>
         <p className="mt-2 px-4 text-center text-gray-500">
           Sign up to be able to make an appointments
@@ -219,12 +219,12 @@ const SignUpDoctor = () => {
           >
             Sign up
           </button>
-          <p className="text-gray-500">
+          {/* <p className="text-gray-500">
             Already registered?{" "}
             <Link to="/signin">
               <button className="underline">Sign In</button>
             </Link>
-          </p>
+          </p> */}
         </form>
         <Modal
           active={modalActive}

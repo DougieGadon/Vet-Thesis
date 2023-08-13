@@ -39,3 +39,18 @@ form td:last-child {
 form * {
   font-size: 15px;
 }
+
+button {
+  border-color: black;
+  border-width: 1px;
+}
+
+input {
+  border-color: black;
+  border-width: 1px;
+}
+
+select {
+  border-color: black;
+  border-width: 1px;
+}

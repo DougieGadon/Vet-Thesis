@@ -104,6 +104,7 @@ const AppointmentNew = ({ inputs, title }) => {
         petname: petName,
         doctorname: doctorName,
         userid: currentUser.uid,
+        totalAmount: 0,
       });
       navigate(-1);
     } catch (err) {

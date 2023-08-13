@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import "./login.scss";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 const Login = () => {
@@ -44,7 +44,14 @@ const Login = () => {
         />
         <button type="submit">Login</button>
         {error && <span>Wrong email or password!</span>}
+        <p className="text-md mt-3 text-left text-gray-500">
+          Don't have an account?{" "}
+        </p>
+        <Link to="/signup">
+          <div className="underline">Create</div>
+        </Link>
       </form>
+      <div></div>
     </div>
   );
 };

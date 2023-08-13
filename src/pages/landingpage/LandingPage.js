@@ -8,6 +8,7 @@ import Navbar from "../../components/landingpage/navbar/Navbar";
 import Projects from "../../components/landingpage/projects/Projects";
 import Resume from "../../components/landingpage/resume/Resume";
 import Testimonial from "../../components/landingpage/tesimonial/Testimonial";
+import FacebookMsg from "../chatbox/FacebookMsg";
 
 function LandingPage() {
   return (
@@ -22,6 +23,7 @@ function LandingPage() {
         <Contact />
         {/* <Footer /> */}
         <FooterBottom />
+        <FacebookMsg />
       </div>
     </div>
   );

@@ -12,8 +12,8 @@ const List = ({ transactions }) => {
   console.log("Table Transactions", transactions);
 
   const location = useLocation();
-  const { role } = location.state;
-  console.log(role);
+  // // const { role } = location.state;
+  // console.log(role);
 
   // const rows = [
   //   {

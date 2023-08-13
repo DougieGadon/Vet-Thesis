@@ -22,12 +22,18 @@ const Sidebar = ({ role }) => {
   const { dispatch } = useContext(AuthContext);
 
   console.log("Role", role);
+
+  const logout = () => {
+    localStorage.setItem("user", null);
+    dispatch({ type: "LOGOUT", payload: null });
+  };
+
   return (
     <div className="sidebar">
       <div className="top">
         <Link to="/dashboard" style={{ textDecoration: "none" }}>
           {role === "admin" ? <span className="logo">Admin</span> : ""}
-          {role === "user" ? <span className="logo">User</span> : ""}
+          {role === "user" ? <span className="logo">Customer</span> : ""}
           {role === "doctor" ? <span className="logo">Doctor</span> : ""}
         </Link>
       </div>
@@ -133,7 +139,7 @@ const Sidebar = ({ role }) => {
           <Link to="/" style={{ textDecoration: "none" }}>
             <li>
               <ExitToAppIcon className="icon" />
-              <div onClick={() => dispatch({ type: "LOGOUT", payload: null })}>
+              <div onClick={() => logout()}>
                 <span>Logout</span>
               </div>
             </li>

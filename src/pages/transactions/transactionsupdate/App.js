@@ -1,13 +1,16 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
-import data from "./mock-data.json";
 import ReadOnlyRow from "./components/ReadOnlyRow";
 import EditableRow from "./components/EditableRow";
-import { getAllDocumentsFromCollection } from "../../../firebaseQueries";
+import {
+  getAllDocumentsFromCollection,
+  updateSpecificDocumentInCollection,
+} from "../../../firebaseQueries";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 const App = ({ transaction }) => {
   const [transactions, setTransactions] = useState([]);
@@ -17,8 +20,10 @@ const App = ({ transaction }) => {
   const [serviceFlag, setServiceFlag] = useState("service");
   const [amount, setAmount] = useState("0.00");
   const [totalamount, setTotalAmount] = useState("0.00");
+
   const [quantity, setQuantity] = useState("0");
   const [price, setPrice] = useState("0");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getService = async () => {
@@ -67,7 +72,7 @@ const App = ({ transaction }) => {
     setAddFormData(newFormData);
   };
 
-  const handleCompleteTransaction = (event) => {
+  const handleCompleteTransaction = async (event) => {
     event.preventDefault();
 
     console.log("Complete Transaction", transactions);
@@ -90,6 +95,20 @@ const App = ({ transaction }) => {
         petname: transaction.petname,
       });
     });
+
+    updatePaymentStatus();
+  };
+
+  const updatePaymentStatus = async () => {
+    try {
+      await updateSpecificDocumentInCollection("appointments", transaction.id, {
+        paymentstatus: "Pending",
+        status: "Served",
+        totalAmount: totalamount,
+      });
+
+      navigate(-1);
+    } catch (error) {}
   };
 
   const handleQuantityFormChange = (event) => {
@@ -97,16 +116,21 @@ const App = ({ transaction }) => {
 
     const fieldValueQuantity = event.target.value;
 
-    console.log("Quantity and Amount", fieldValueQuantity, amount);
     setAmount(Number(fieldValueQuantity) * Number(price));
+    setQuantity(fieldValueQuantity);
+    console.log("Quantity Change", quantity);
 
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
+    console.log("Quantity and Amount", fieldValue, amount, fieldName);
+    // setQuantity(fieldValue);
 
-    console.log("Quantity", quantity);
+    console.log("Quantity", fieldValueQuantity);
 
     const newFormData = { ...addFormData };
     newFormData[fieldName] = fieldValue;
+
+    console.log("Quantity", newFormData);
 
     setAddFormData(newFormData);
   };
@@ -116,10 +140,15 @@ const App = ({ transaction }) => {
 
     const fieldValueAmount = event.target.value;
 
-    console.log("Service Amount", fieldValueAmount.split("-")[2]);
-    setAmount(fieldValueAmount.split("-")[2]);
+    console.log(
+      "Service Amount",
+      fieldValueAmount.split("-")[2],
+      fieldValueAmount,
+      quantity
+    );
+    setAmount(Number(fieldValueAmount.split("-")[2]) * quantity);
     setPrice(fieldValueAmount.split("-")[2]);
-    setQuantity("1");
+    // setQuantity("1");
 
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -130,7 +159,7 @@ const App = ({ transaction }) => {
     const fieldNameQuantity = "quantity";
     newFormData[fieldNameQuantity] = quantity;
     const fieldNameAmount = "amount";
-    newFormData[fieldNameAmount] = amount;
+    newFormData[fieldNameAmount] = "amount";
 
     setAddFormData(newFormData);
   };
@@ -140,9 +169,9 @@ const App = ({ transaction }) => {
     const fieldValueAmount = event.target.value;
 
     console.log("Product Amount", fieldValueAmount.split("-")[2]);
-    setAmount(fieldValueAmount.split("-")[2]);
+    setAmount(Number(fieldValueAmount.split("-")[2]) * quantity);
     setPrice(fieldValueAmount.split("-")[2]);
-    setQuantity("1");
+    // setQuantity("1");
 
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
@@ -198,7 +227,7 @@ const App = ({ transaction }) => {
       id: nanoid(),
       type: addFormData.type,
       item: addFormData.item,
-      quantity: quantity,
+      quantity: addFormData.quantity,
       amount: amount,
     };
 
@@ -209,12 +238,12 @@ const App = ({ transaction }) => {
     const newTransactions = [...transactions, newTransaction];
     setTransactions(newTransactions);
     console.log("All Transactions", transactions);
-    setAddFormData({
-      type: "",
-      item: "",
-      quantity: "1",
-      amount: "0.00",
-    });
+    // setAddFormData({
+    //   type: "",
+    //   item: "",
+    //   quantity: "1",
+    //   amount: "0.00",
+    // });
     // console.log("Query", document.getElementsByName("type"));
     // document.getElementsByName("type").selectedIndex = 0;
   };

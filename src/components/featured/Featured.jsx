@@ -1,11 +1,29 @@
 import "./featured.scss";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { CircularProgressbar } from "react-circular-progressbar";
+import { CircularProressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+import { useEffect, useState } from "react";
+import { collection, query, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 
-const Featured = () => {
+const Featured = (role) => {
+  const [count, setCount] = useState([]);
+  useEffect(() => {
+    const getTransactions = async () => {
+      const q2 = query(collection(db, "transactions"));
+      const transacts = [];
+      const querySnapshot = await getDocs(q2);
+      console.log(querySnapshot.docs.push);
+      let totalAmount = 0;
+      querySnapshot.forEach((doc) => {
+        totalAmount += Number(doc.data().amount);
+      });
+      console.log("Transactions ", totalAmount);
+      setCount(totalAmount);
+    };
+    getTransactions();
+  }, []);
+
   return (
     <div className="featured">
       <div className="top">
@@ -13,15 +31,18 @@ const Featured = () => {
         <MoreVertIcon fontSize="small" />
       </div>
       <div className="bottom">
-        <div className="featuredChart">
+        {/* <div className="featuredChart">
           <CircularProgressbar value={70} text={"70%"} strokeWidth={5} />
-        </div>
-        <p className="title">Total sales made today</p>
-        <p className="amount">$420</p>
-        <p className="desc">
-          Previous transactions processing. Last payments may not be included.
+        </div> */}
+        {/* <p className="title">Total sales made today</p> */}
+        <p className="amount">
+          {"₱"}
+          {count}
         </p>
-        <div className="summary">
+        {/* <p className="desc">
+          Previous transactions processing. Last payments may not be included.
+        </p> */}
+        {/* <div className="summary">
           <div className="item">
             <div className="itemTitle">Target</div>
             <div className="itemResult negative">
@@ -43,7 +64,7 @@ const Featured = () => {
               <div className="resultAmount">$12.4k</div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

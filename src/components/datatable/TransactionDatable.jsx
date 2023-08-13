@@ -59,26 +59,38 @@ const TransactionDatatable = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link
-              to={params.row.id}
-              state={{ role: role }}
-              style={{ textDecoration: "none" }}
-            >
-              <div className="viewButton">View</div>
-            </Link>
-            <div
-              className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
-            >
-              Cancel
-            </div>
-            <Link
-              to={"/transactions/update/" + params.row.id}
-              state={{ role: role }}
-              style={{ textDecoration: "none" }}
-            >
-              <div className="editButton">Serve</div>
-            </Link>
+            {params.row.status !== "Served" ? (
+              <Link
+                to={params.row.id}
+                state={{ role: role }}
+                style={{ textDecoration: "none" }}
+              >
+                <div className="viewButton">View</div>
+              </Link>
+            ) : (
+              ""
+            )}
+            {params.row.status !== "Served" ? (
+              <div
+                className="deleteButton"
+                onClick={() => handleDelete(params.row.id)}
+              >
+                Cancel
+              </div>
+            ) : (
+              ""
+            )}
+            {params.row.status !== "Served" ? (
+              <Link
+                to={"/transactions/update/" + params.row.id}
+                state={{ role: role }}
+                style={{ textDecoration: "none" }}
+              >
+                <div className="editButton">Serve</div>
+              </Link>
+            ) : (
+              ""
+            )}
           </div>
         );
       },

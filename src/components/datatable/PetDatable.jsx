@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const PetDatatable = () => {
   const [data, setData] = useState([]);
@@ -14,14 +16,24 @@ const PetDatatable = () => {
   const { role } = location.state;
   console.log(role);
 
+  const { currentUser } = useContext(AuthContext);
+
   useEffect(() => {
     // LISTEN (REALTIME)
+    console.log("current User", currentUser.uid);
     const unsub = onSnapshot(
       collection(db, "pets"),
       (snapShot) => {
         let list = [];
         snapShot.docs.forEach((doc) => {
-          list.push({ id: doc.id, ...doc.data() });
+          console.log("Pet User", doc.data().userId);
+          if (role === "admin") {
+            list.push({ id: doc.id, ...doc.data() });
+          } else {
+            if (doc.data().userId === currentUser.uid) {
+              list.push({ id: doc.id, ...doc.data() });
+            }
+          }
         });
         console.log("Pet List", list);
         setData(list);

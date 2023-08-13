@@ -10,52 +10,81 @@ import { AuthContext } from "../../context/AuthContext";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
 
-const Home = () => {
+const Home = ({ role }) => {
   const [transactions, setTransaction] = useState([]);
   const { currentUser } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
-  const [role, setRole] = useState("");
+  // const [role, setRole] = useState("");
 
   console.log("Current User", currentUser.uid);
 
+  // useEffect(() => {
+  //   const getUsers = async () => {
+  //     const q1 = query(
+  //       collection(db, "users"),
+  //       where("id", "==", currentUser.uid)
+  //     );
+  //     const users = [];
+  //     const querySnapshot = await getDocs(q1);
+  //     console.log(querySnapshot.docs.push);
+  //     querySnapshot.forEach((doc) => {
+  //       users.push(doc.data());
+  //       setRole(doc.data().role);
+  //       console.log("Role 2", doc.data().role);
+  //     });
+  //     console.log("Users 1", users);
+  //     console.log("Role 1", role);
+  //   };
+  //   getUsers();
+  // }, []);
+
   useEffect(() => {
     const getTransactions = async () => {
-      const q2 = query(
-        collection(db, "transactions"),
-        where("userid", "==", currentUser.uid)
-      );
-      const transacts = [];
-      const querySnapshot = await getDocs(q2);
-      console.log(querySnapshot.docs.push);
-      querySnapshot.forEach((doc) => {
-        transacts.push(doc.data());
-      });
-      console.log("Transactions ", transacts);
-      setTransaction(transacts);
+      if (role === "user") {
+        const q2 = query(
+          collection(db, "transactions"),
+          where("userid", "==", currentUser.uid)
+        );
+        const transacts = [];
+        const querySnapshot = await getDocs(q2);
+        console.log(querySnapshot.docs.push);
+        querySnapshot.forEach((doc) => {
+          transacts.push(doc.data());
+        });
+        console.log("Transactions ", transacts);
+        setTransaction(transacts);
+      }
+      if (role === "doctor") {
+        const q2 = query(
+          collection(db, "transactions"),
+          where("doctorid", "==", currentUser.uid)
+        );
+        const transacts = [];
+        const querySnapshot = await getDocs(q2);
+        console.log(querySnapshot.docs.push);
+        querySnapshot.forEach((doc) => {
+          transacts.push(doc.data());
+        });
+        console.log("Transactions ", transacts);
+        setTransaction(transacts);
+      }
+      if (role === "admin") {
+        console.log("Entered Admin Transaction");
+        const q2 = query(collection(db, "transactions"));
+        const transacts = [];
+        const querySnapshot = await getDocs(q2);
+        console.log(querySnapshot.docs.push);
+        querySnapshot.forEach((doc) => {
+          transacts.push(doc.data());
+        });
+        console.log("Transactions ", transacts);
+        setTransaction(transacts);
+      }
     };
     getTransactions();
   }, []);
 
-  useEffect(() => {
-    const getUsers = async () => {
-      const q1 = query(
-        collection(db, "users"),
-        where("id", "==", currentUser.uid)
-      );
-      const users = [];
-      const querySnapshot = await getDocs(q1);
-      console.log(querySnapshot.docs.push);
-      querySnapshot.forEach((doc) => {
-        users.push(doc.data());
-      });
-      console.log("Users ", users);
-      // setUsers(users);
-      users.map((user) => setRole(user.role));
-    };
-    getUsers();
-  }, []);
-
-  // users.map((user) => setRole(user.role));
+  console.log("Role", role);
 
   return (
     <div className="home">
@@ -63,14 +92,32 @@ const Home = () => {
       <div className="homeContainer">
         <Navbar />
         <div className="widgets">
-          <Widget type="user" />
-          <Widget type="product" />
-          <Widget type="order" />
-          <Widget type="earning" />
+          {role === "admin" ? <Widget role={role} type="users" /> : ""}
+          {role === "admin" ? <Widget role={role} type="products" /> : ""}
+          {role === "admin" ? <Widget role={role} type="services" /> : ""}
+          {role === "user" || role === "admin" ? (
+            <Widget role={role} type="pets" />
+          ) : (
+            ""
+          )}
+          <Widget type="appointments" />
+          {role === "admin" || role === "doctor" ? (
+            <Widget role={role} type="revenue" />
+          ) : (
+            ""
+          )}
         </div>
         <div className="charts">
-          <Featured />
-          <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
+          {/* {role === "admin" ? <Featured role={role} /> : ""} */}
+          {role === "admin" ? (
+            <Chart
+              transactions={transactions}
+              title="Last 6 Months (Revenue)"
+              aspect={2 / 1}
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="listContainer">
           <div className="listTitle">Latest Transactions</div>

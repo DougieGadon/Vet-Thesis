@@ -16,7 +16,7 @@ import {
   appointmentInputs,
   transactionInputs,
 } from "./formSource";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/AuthContext";
 import ProductList from "./pages/products/productlist/ProductList";
@@ -40,6 +40,9 @@ import TransactionsSingle from "./pages/transactions/transactionssingle/Transact
 import TransactionsNew from "./pages/transactions/transactionsnew/TransactionsNew";
 import TransactionsUpdate from "./pages/transactions/transactionsupdate/TransactionsUpdate";
 import LandingPage from "./pages/landingpage/LandingPage";
+import SignUp from "./pages/signup/SignUp";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "./firebase";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -50,6 +53,25 @@ function App() {
     return currentUser ? children : <Navigate to="/login" />;
   };
 
+  const [role, setRole] = useState([]);
+  const unsub = onSnapshot(
+    collection(db, "users"),
+    (snapShot) => {
+      let list = [];
+      snapShot.docs.forEach((doc) => {
+        console.log("APP users", doc.data().id);
+        if (doc.data().id === currentUser.uid) {
+          setRole(doc.data().role);
+        }
+      });
+      console.log("APP role", role);
+      // setCount(list.length);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+
   return (
     <div className={darkMode ? "app dark" : "app"}>
       <BrowserRouter>
@@ -57,6 +79,7 @@ function App() {
           <Route path="/">
             <Route index element={<LandingPage />} />
             <Route path="login" element={<Login />} />
+            <Route path="signup" element={<SignUp />} />
             <Route
               path="profile"
               element={
@@ -70,7 +93,7 @@ function App() {
               index
               element={
                 <RequireAuth>
-                  <Home />
+                  <Home role={role} />
                 </RequireAuth>
               }
             />

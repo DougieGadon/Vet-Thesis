@@ -35,8 +35,8 @@ export const userColumns = [
     width: 150,
   },
   {
-    field: "paymentlink",
-    headerName: "Payment Link",
+    field: "totalAmount",
+    headerName: "Total Amount",
     width: 150,
   },
 ];

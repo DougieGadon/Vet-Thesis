@@ -76,7 +76,9 @@ const AppointmentDatatable = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic c2tfdGVzdF95NTR0NHhxeEZBd3I5cUUyRW9nYVZ4QVI6",
+        //Authorization: "Basic c2tfdGVzdF95NTR0NHhxeEZBd3I5cUUyRW9nYVZ4QVI6",
+        Authorization:
+          "Basic cGtfdGVzdF9qUXhNTFZDdENlQkwyZDN2MWZBYWpTcEQ6c2tfdGVzdF95NTR0NHhxeEZBd3I5cUUyRW9nYVZ4QVI=",
       },
     };
     const data = await fetch(
@@ -114,7 +116,9 @@ const AppointmentDatatable = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic c2tfdGVzdF95NTR0NHhxeEZBd3I5cUUyRW9nYVZ4QVI6",
+        //Authorization: "Basic c2tfdGVzdF95NTR0NHhxeEZBd3I5cUUyRW9nYVZ4QVI6",
+        Authorization:
+          "Basic cGtfdGVzdF9qUXhNTFZDdENlQkwyZDN2MWZBYWpTcEQ6c2tfdGVzdF95NTR0NHhxeEZBd3I5cUUyRW9nYVZ4QVI=",
       },
       body: JSON.stringify({
         data: {

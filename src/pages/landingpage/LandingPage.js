@@ -22,7 +22,7 @@ function LandingPage() {
         {/* <Testimonial /> */}
         <Contact />
         {/* <Footer /> */}
-        <FooterBottom />
+        {/* <FooterBottom /> */}
         <FacebookMsg />
       </div>
     </div>

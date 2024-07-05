@@ -19,14 +19,12 @@ const Projects = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-14">
         <ProjectsCard
           title="DR. HANS JOSHUA AGGABAO"
-          des=" Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Explicabo quibusdam voluptate sapiente voluptatibus harum quidem!"
+          des=""
           src="/assets/doctors/william.jpg"
         />
         <ProjectsCard
           title="DR. JOSH RYAN AGGABAO"
-          des=" Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Explicabo quibusdam voluptate sapiente voluptatibus harum quidem!"
+          des=""
           src="/assets/doctors/milton.jpg"
         />
       </div>

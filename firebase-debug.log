@@ -1,0 +1,38 @@
+[debug] [2024-07-05T05:55:28.517Z] ----------------------------------------------------------------------
+[debug] [2024-07-05T05:55:28.521Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\aldri\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --project vet-app-test
+[debug] [2024-07-05T05:55:28.521Z] CLI Version:   12.4.6
+[debug] [2024-07-05T05:55:28.522Z] Platform:      win32
+[debug] [2024-07-05T05:55:28.522Z] Node Version:  v18.16.0
+[debug] [2024-07-05T05:55:28.524Z] Time:          Fri Jul 05 2024 13:55:28 GMT+0800 (Philippine Standard Time)
+[debug] [2024-07-05T05:55:28.524Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-07-05T05:55:28.670Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"headers"}
+[debug] [2024-07-05T05:55:28.676Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-07-05T05:55:28.677Z] > authorizing via signed-in user (hjaggabao@gmail.com)
+[debug] [2024-07-05T05:55:28.678Z] [iam] checking project vet-app-test for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-07-05T05:55:28.680Z] > refreshing access token with scopes: []
+[debug] [2024-07-05T05:55:28.682Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-07-05T05:55:28.682Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-07-05T05:55:28.888Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2024-07-05T05:55:28.888Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-07-05T05:55:28.889Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/vet-app-test:testIamPermissions [none]
+[debug] [2024-07-05T05:55:28.889Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/vet-app-test:testIamPermissions x-goog-quota-user=projects/vet-app-test
+[debug] [2024-07-05T05:55:28.889Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/vet-app-test:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-07-05T05:55:29.722Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/vet-app-test:testIamPermissions 401
+[debug] [2024-07-05T05:55:29.722Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/vet-app-test:testIamPermissions {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"ACCESS_TOKEN_TYPE_UNSUPPORTED","metadata":{"method":"google.cloudresourcemanager.v1.Projects.TestIamPermissions","service":"cloudresourcemanager.googleapis.com"}}]}}
+[debug] [2024-07-05T05:55:29.724Z] [iam] error while checking permissions, command may fail: FirebaseError: HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2024-07-05T05:55:29.725Z] > refreshing access token with scopes: []
+[debug] [2024-07-05T05:55:29.726Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-07-05T05:55:29.726Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-07-05T05:55:29.836Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2024-07-05T05:55:29.837Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-07-05T05:55:29.838Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vet-app-test [none]
+[debug] [2024-07-05T05:55:29.933Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vet-app-test 401
+[debug] [2024-07-05T05:55:29.933Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vet-app-test {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED"}}
+[debug] [2024-07-05T05:55:29.933Z] HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2024-07-05T05:55:30.024Z] FirebaseError: HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+    at responseToError (C:\Users\aldri\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:49:12)
+    at RetryOperation._fn (C:\Users\aldri\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:285:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project vet-app-test. Please make sure the project exists and your account has permission to access it.
